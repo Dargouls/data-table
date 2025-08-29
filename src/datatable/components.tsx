@@ -102,6 +102,13 @@ export interface RowSelectionConfig {
 	onSelectionChange?: (selectedRows: any[]) => void;
 }
 
+export interface RowActionsConfig<T = any> {
+	enabled: boolean;
+	renderActions: (row: T, index: number) => ReactNode;
+	width?: number;
+	position?: 'start' | 'end';
+}
+
 export interface DataTableProps<T = any> {
 	data: T[];
 	columns: DataTableColumn<T>[];
@@ -113,6 +120,7 @@ export interface DataTableProps<T = any> {
 	advancedFilter?: boolean;
 	rowExpansion?: RowExpansionConfig<T>;
 	rowSelection?: RowSelectionConfig;
+	rowActions?: RowActionsConfig<T>;
 	columnSpacing?: 'compact' | 'normal' | 'comfortable';
 	className?: string;
 }
@@ -824,6 +832,15 @@ export function DataTable<T extends Record<string, any>>(props: DataTableProps<T
 							{props.rowExpansion?.enabled && (
 								<S.HeaderCell width={40} spacing={props.columnSpacing || 'normal'}></S.HeaderCell>
 							)}
+							{props.rowActions?.enabled && props.rowActions.position === 'start' && (
+								<S.HeaderCell
+									width={props.rowActions.width || 120}
+									spacing={props.columnSpacing || 'normal'}
+									justifyContent='center'
+								>
+									Ações
+								</S.HeaderCell>
+							)}
 							{allVisibleColumns.map((column) => {
 								const pinning = columnPinning[column.id];
 								const offset = columnOffsets[column.id] || 0;
@@ -949,6 +966,15 @@ export function DataTable<T extends Record<string, any>>(props: DataTableProps<T
 									</S.HeaderCell>
 								);
 							})}
+							{props.rowActions?.enabled && props.rowActions.position !== 'start' && (
+								<S.HeaderCell
+									width={props.rowActions.width || 120}
+									spacing={props.columnSpacing || 'normal'}
+									justifyContent='center'
+								>
+									Ações
+								</S.HeaderCell>
+							)}
 						</tr>
 					</S.TableHead>
 
@@ -988,6 +1014,15 @@ export function DataTable<T extends Record<string, any>>(props: DataTableProps<T
 												</button>
 											</S.DataCell>
 										)}
+										{props.rowActions?.enabled && props.rowActions.position === 'start' && (
+											<S.DataCell
+												width={props.rowActions.width || 120}
+												spacing={props.columnSpacing || 'normal'}
+												justifyContent='center'
+											>
+												<S.ActionsContainer>{props.rowActions.renderActions(row, index)}</S.ActionsContainer>
+											</S.DataCell>
+										)}
 
 										{allVisibleColumns.map((column) => {
 											const pinning = columnPinning[column.id];
@@ -1017,6 +1052,15 @@ export function DataTable<T extends Record<string, any>>(props: DataTableProps<T
 												</S.DataCell>
 											);
 										})}
+										{props.rowActions?.enabled && props.rowActions.position !== 'start' && (
+											<S.DataCell
+												width={props.rowActions.width || 120}
+												spacing={props.columnSpacing || 'normal'}
+												justifyContent='center'
+											>
+												<S.ActionsContainer>{props.rowActions.renderActions(row, index)}</S.ActionsContainer>
+											</S.DataCell>
+										)}
 									</tr>
 
 									{props.rowExpansion?.enabled && expandedRows.has(index) && (
@@ -1025,7 +1069,8 @@ export function DataTable<T extends Record<string, any>>(props: DataTableProps<T
 												colSpan={
 													allVisibleColumns.length +
 													(props.rowSelection?.enabled ? 1 : 0) +
-													(props.rowExpansion?.enabled ? 1 : 0)
+													(props.rowExpansion?.enabled ? 1 : 0) +
+													(props.rowActions?.enabled ? 1 : 0)
 												}
 												style={{
 													padding: '16px',

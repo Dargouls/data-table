@@ -188,6 +188,21 @@ export function DataTableExample() {
 	const [loading, setLoading] = useState(false);
 	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
+	// Funções de ação
+	const handleView = (user: User, index: number) => {
+		alert(`Visualizar usuário: ${user.name}`);
+	};
+
+	const handleEdit = (user: User, index: number) => {
+		alert(`Editar usuário: ${user.name}`);
+	};
+
+	const handleDelete = (user: User, index: number) => {
+		if (confirm(`Deseja excluir o usuário ${user.name}?`)) {
+			alert(`Usuário ${user.name} excluído!`);
+		}
+	};
+
 	// Componente para linha expandida
 	const renderExpandedRow = (user: User) => (
 		<div style={{ padding: '16px', backgroundColor: '#f8fafc' }}>
@@ -283,6 +298,90 @@ export function DataTableExample() {
 						enabled: true,
 						searchableColumns: ['name', 'email', 'department'],
 						placeholder: 'Buscar por nome, email ou departamento...',
+					}}
+					rowActions={{
+						enabled: true,
+						position: 'end',
+						width: 140,
+						renderActions: (user, index) => (
+							<>
+								<button
+									onClick={() => handleView(user, index)}
+									style={{
+										display: 'inline-flex',
+										alignItems: 'center',
+										gap: '4px',
+										padding: '4px 8px',
+										border: '1px solid #d1d5db',
+										borderRadius: '4px',
+										background: '#f3f4f6',
+										color: '#374151',
+										fontSize: '12px',
+										cursor: 'pointer',
+										transition: 'all 0.2s ease',
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.background = '#e5e7eb';
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.background = '#f3f4f6';
+									}}
+								>
+									<Eye size={12} />
+									Ver
+								</button>
+								<button
+									onClick={() => handleEdit(user, index)}
+									style={{
+										display: 'inline-flex',
+										alignItems: 'center',
+										gap: '4px',
+										padding: '4px 8px',
+										border: '1px solid #3b82f6',
+										borderRadius: '4px',
+										background: '#3b82f6',
+										color: 'white',
+										fontSize: '12px',
+										cursor: 'pointer',
+										transition: 'all 0.2s ease',
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.background = '#2563eb';
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.background = '#3b82f6';
+									}}
+								>
+									<Edit size={12} />
+									Editar
+								</button>
+								<button
+									onClick={() => handleDelete(user, index)}
+									style={{
+										display: 'inline-flex',
+										alignItems: 'center',
+										gap: '4px',
+										padding: '4px 8px',
+										border: '1px solid #dc2626',
+										borderRadius: '4px',
+										background: '#dc2626',
+										color: 'white',
+										fontSize: '12px',
+										cursor: 'pointer',
+										transition: 'all 0.2s ease',
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.background = '#b91c1c';
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.background = '#dc2626';
+									}}
+								>
+									<Trash2 size={12} />
+									Excluir
+								</button>
+							</>
+						),
 					}}
 					export={{
 						enabled: true,

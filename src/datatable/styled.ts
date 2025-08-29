@@ -591,3 +591,10 @@ export const ResizeHandle = styled.div`
     background: #1d4ed8;
   }
 `;
+
+export const ActionsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+`;
